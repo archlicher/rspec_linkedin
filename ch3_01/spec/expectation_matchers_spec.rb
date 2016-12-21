@@ -175,4 +175,129 @@ describe 'expectation matchers' do
 		end
 	end
 
+	describe 'predicate matchers' do
+
+		it 'will match be_* to custom methods ending in ?' do
+			expect([]).to be_empty
+			expect(1).to be_integer
+			expect(0).to be_zero
+			expect(1).to be_nonzero
+			expect(1).to be_odd
+			expect(2).to be_even
+
+			class Product
+				def visible?; true; end
+			end
+
+			product = Product.new
+
+			expect(product).to be_visible
+			expect(product.visible?).to be true
+		end
+
+		it 'will match have_* custom methods like has_*?' do
+			hash = {:a => 1, :b => 2}
+			expect(hash).to have_key(:a)
+			expect(hash).to have_value(2)
+
+			class Customer
+				def has_pending_order?; true; end
+			end
+
+			customer = Customer.new
+
+			expect(customer).to have_pending_order
+			expect(customer.has_pending_order?).to be true
+		end
+	end
+
+	describe 'observation matchers' do
+
+		it 'will match when events change object attributes' do
+			array = []
+			expect {array << 1}.to change(array, :empty?).from(true).to(false)
+
+			class Person
+				attr_accessor :first_name, :last_name
+				def full_name; @first_name + " " + @last_name; end
+			end
+
+			person = Person.new
+			person.first_name = 'John'
+			person.last_name = 'Smith'
+
+			expect { person.first_name = 'Nor' }.to change(person, :full_name).from('John Smith').to('Nor Smith')
+		end
+
+		it 'will match when events change any values' do
+			x = 10
+			expect { x += 1 }.to change {x}.from(10).to(11)
+			expect { x += 1 }.to change {x}.by(1)
+			expect { x += 1 }.to change {x}.by_at_least(1)
+			expect { x += 1 }.to change {x}.by_at_most(1)
+
+			z = 11
+			expect { z += 1}.to change { z % 3 }.from(2).to(0)
+		end
+
+		it 'will match when errors are raised' do
+			expect { raise StandartError }.to raise_error
+			expect { raise StandartError }.to raise_exception
+
+			expect { 1 / 0 }.to raise_error(ZeroDivisionError)
+			expect { 1 / 0 }.to raise_error.with_message("divided by 0")
+
+			expect { 1 / 0 }.to raise_error.with_message(/divided/)
+
+			expect { 1 / 1 }.not_to raise_error
+		end
+
+		it 'will match when output is generated' do
+			expect { print("hello") }.to output.to_stdout
+			expect { print("hello") }.to output('hello').to_stdout
+			expect { print("hello") }.to output(/ll/).to_stdout
+
+			expect { warn("problem") }.to output(/problem/).to_stderr
+		end
+	end
+
+	describe 'compound expectations' do
+
+		it 'will match using; and, or, &, |' do
+			expect([1,2,3,4]).to start_with(1).and end_with(4)
+			expect([1,2,3,4]).to start_with(1) & include(2)
+			expect(10 * 10).to be_odd.or be > 50
+			array = ['hello', 'goodbye'].shuffle
+			expect(array.first).to eq('hello') | eq('goodbye')
+		end
+	end
+
+	describe 'composing matchers' do
+
+		it 'will match all collection elements using matcher' do
+			array = [1,2,3]
+			expect(array).to all( be < 5 )
+		end
+
+		it 'will match by sending matchers as arguments to matchers' do
+			string = "hello"
+			expect { string = "goodbye" }.to change { string }.from( match(/ll/) ).to( match(/oo/) )
+
+			hash = {:a => 1, :b => 2, :c => 3}
+			expect(hash).to include(:a => be_odd, :b => be_even, :c => be_odd)
+			expect(hash).to include(:a => be > 0, :b => be_within(2).of(4) )
+		end
+
+		it 'will match using noun-pharese aliases for matchers' do
+			fruits = ['apple', 'banana', 'cherry']
+			expect(fruits).to start_with( a_string_starting_with('a') ) & include( a_string_matching(/a.a.a/) ) & end_with( a_string_ending_with('y') )
+
+			array = [1,2,3,4]
+			expect(array).to start_with( be <= 2) | end_with( be_within(1).of(5) )
+
+			array = [1,2,3,4]
+			expect(array).to start_with( a_value <= 2) | end_with( a_value_within(1).of(5) )
+		end
+	end
+
 end
