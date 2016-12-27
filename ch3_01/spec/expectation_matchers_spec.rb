@@ -1,7 +1,6 @@
 describe 'expectation matchers' do
 
 	describe 'equivalence matchers' do
-
 		it 'will match loose equality with #eq' do
 			a = "2 cats"
 			b = "2 cats"
@@ -241,8 +240,8 @@ describe 'expectation matchers' do
 		end
 
 		it 'will match when errors are raised' do
-			expect { raise StandartError }.to raise_error
-			expect { raise StandartError }.to raise_exception
+			# expect { raise StandardError }.to raise_error
+			# expect { raise StandardError }.to raise_exception
 
 			expect { 1 / 0 }.to raise_error(ZeroDivisionError)
 			expect { 1 / 0 }.to raise_error.with_message("divided by 0")

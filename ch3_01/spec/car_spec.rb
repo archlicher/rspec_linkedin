@@ -1,34 +1,46 @@
 require 'car'
 
-describe 'Car' do
+describe Car do
 
 	describe 'attributes' do
+		# before(:context) do
+		# 	def car
+		# 		@car ||= Car.new
+		# 	end
+		# end
+
+		# before(:example) do
+		# 	@car = Car.new
+		# end
+
+		# let(:car) { Car.new }
+		# subject { Car.new }
 	# xdescribe 'attributes' do
 		# xit "allows reading and writing for :make" do
 
 		it "allows reading and writing for :make" do
 			# skip "No need to run it" not running
 			# pending("Debugging a problem") runs the code and marks it as fail
-			car = Car.new
-			car.make = 'Test'
-			expect(car.make).to eq('Test')
+			# car = Car.new
+			subject.make = 'Test'
+			expect(subject.make).to eq('Test')
 		end
 
 		it "allows reading and writing for :year" do
-			car = Car.new
-			car.year = 9999
-			expect(car.year).to eq(9999)
+			# car = Car.new
+			subject.year = 9999
+			expect(subject.year).to eq(9999)
 		end
 
 		it "allows reading and writing for :color" do
-			car = Car.new
-			car.color = 'foo'
-			expect(car.color).to eq('foo')
+			# car = Car.new
+			subject.color = 'foo'
+			expect(subject.color).to eq('foo')
 		end
 
 		it "allows reading for :wheels" do
-			car = Car.new
-			expect(car.wheels).to eq(4)
+			# car = Car.new
+			expect(subject.wheels).to eq(4)
 		end
 
 		it "allows writing for :doors"
@@ -36,9 +48,11 @@ describe 'Car' do
 	end
 
 	describe '.colors' do
+
+		let(:colors) { ['blue', 'black', 'red', 'green'] }
+
 		it "returns an array of color names" do
-			c = ['blue', 'black', 'red', 'green']
-			expect(Car.colors).to match_array(c)
+			expect(Car.colors).to match_array(colors)
 		end
 	end
 

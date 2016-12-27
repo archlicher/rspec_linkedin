@@ -20,7 +20,7 @@ RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
+  config.expect_with :rspec do |expectation|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
     # defined using `chain`, e.g.:
@@ -28,7 +28,9 @@ RSpec.configure do |config|
     #     # => "be bigger than 2 and smaller than 4"
     # ...rather than:
     #     # => "be bigger than 2"
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+    expectation.include_chain_clauses_in_custom_matcher_descriptions = true
+    # expectation.syntax = [:should, :expect]
+    expectation.syntax = :expect
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
@@ -100,4 +102,37 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+end
+
+APP_ROOT = File.expand_path('../..', __FILE__)
+
+# no_output do
+#
+# end
+
+def no_output(&block)
+  original_stdout = $stdout.dup
+  $stdout.reopen('/dev/null')
+  $stdout.sync = true
+  begin
+    yield
+  ensure
+    $stdout.reopen(original_stdout)
+  end
+end
+
+# capture_output do
+#
+# end
+
+def capture_output(&block)
+  original_stdout = $stdout.dup
+  output_catcher = StringIO.new
+  $stdout = output_catcher
+  begin
+    yield
+  ensure
+    $stdout = original_stdout
+  end
+  output_catcher.string
 end
