@@ -170,7 +170,7 @@ describe 'Doubles' do
 		end
 	end
 
-	context 'with message coun constraints' do
+	context 'with message count constraints' do
 
 		it 'allows constraints on message count' do
 			class Cart
