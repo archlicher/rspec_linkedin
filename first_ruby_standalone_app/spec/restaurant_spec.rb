@@ -105,7 +105,7 @@ describe Restaurant do
     end
 
     context 'with custom options' do
-
+      #can use crescent
       it 'allows setting the :name' do
         rest = Restaurant.new({:name => 'test'})
         expect(rest.name).to eq('test')
@@ -129,41 +129,76 @@ describe Restaurant do
 
     it 'returns false if @@file is nil' do
       Restaurant.load_file(nil)
+      expect(Restaurant.file).to be_nil
+
       rest = Restaurant.new
       expect(rest.save).to be false
     end
 
     it 'returns false if not valid' do
-      rest = Restaurant.new({:name => nil})
-      expect(rest.save).to be false
+      Restaurant.load_file(test_file)
+
+      expect(Restaurant.file).not_to be_nil
+      expect(subject.save).to be false
     end
 
     it 'calls append on @@file if valid' do
-      rest = Restaurant.new({:name => 'test', :price => '123'})
-      allow(rest).to receive(:append).exactly(1)
-      rest.save
-      expect(rest).to have_received(:append).exactly(1)
+      Restaurant.load_file(test_file)
+      expect(Restaurant.file).not_to be_nil
+
+      expect(Restaurant.file).to receive(:append).with(crescent)
+      crescent.save
     end
 
   end
 
   describe '#valid?' do
 
-    it 'returns false if name is nil'
+    it 'returns false if name is nil' do
+      crescent.name = nil
+      expect(crescent.valid?).to be false
+      expect(crescent.name).to eq(nil)
+    end
 
-    it 'returns false if name is blank'
+    it 'returns false if name is blank' do
+      crescent.name = ' '
+      expect(crescent.valid?).to be false
+      expect(crescent.name).to be_blank
+    end
 
-    it 'returns false if cuisine is nil'
+    it 'returns false if cuisine is nil' do
+      crescent.cuisine = nil
+      expect(crescent.valid?).to be false
+      expect(crescent.cuisine).to eq(nil)
+    end
 
-    it 'returns false if cuisine is blank'
+    it 'returns false if cuisine is blank' do
+      crescent.cuisine = '  '
+      expect(crescent.valid?).to be false
+      expect(crescent.cuisine).to be_blank
+    end
 
-    it 'returns false if price is nil'
+    it 'returns false if price is nil' do
+      crescent.price = nil
+      expect(crescent.valid?).to be false
+      expect(crescent.price).to be_nil
+    end
 
-    it 'returns false if price is 0'
+    it 'returns false if price is 0' do
+      crescent.price = 0
+      expect(crescent.valid?).to be false
+      expect(crescent.price).to eq(0)
+    end
 
-    it 'returns false if price is negative'
+    it 'returns false if price is negative' do
+      crescent.price = -1
+      expect(crescent.valid?).to be false
+      expect(crescent.price).to be < 0
+    end
 
-    it 'returns true if name, cuisine, price are present'
+    it 'returns true if name, cuisine, price are present' do
+      expect(crescent.valid?).to be true
+    end
 
   end
 
