@@ -17,8 +17,8 @@ describe Guide do
 	describe '#intialize' do
 
 		it 'calls Restaurant#load_file with its path argument' do
+			expect(Restaurant).to receive(:load_file).with(test_file)
 			Guide.new(test_file)
-			expect(Restaurant.file).not_to be_nil
 		end
 
 	end
@@ -102,7 +102,7 @@ describe Guide do
 				names = lines[12..17].map {|l| l.match(/^\s(.+)\s+.+\s+\$\d+\.\d{2}$/)[1]}
 				# Build array with the first characters
 				first_chars = names.map {|l| l[0] }
-				# expect(first_chars).to ...
+				expect(first_chars).to eq(['C', 'H', 'M', 'P', 'Q', 'T'])
 			end
 
 			it 'sorts alphabetically with an invalid sort by' do
@@ -113,7 +113,7 @@ describe Guide do
 				names = lines[12..17].map {|l| l.match(/^\s(.+)\s+.+\s+\$\d+\.\d{2}$/)[1]}
 				# Build array with the first characters
 				first_chars = names.map {|l| l[0] }
-				expect(first_chars).to eq(['C', 'H', 'M', 'P', 'Q', 'T'])
+				expect(first_chars).to eq(first_chars.sort)
 			end
 
 			it 'sorts by price when asked' do
