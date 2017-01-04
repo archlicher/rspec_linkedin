@@ -10,7 +10,7 @@ class Guide
   @@valid_actions = ['list', 'find', 'add', 'quit']
 
   @@valid_sorting = ['name', 'cuisine', 'price']
-  
+
   def initialize(path=nil)
     Restaurant.load_file(path)
   end
@@ -25,10 +25,9 @@ class Guide
     end
     output_conclusion
   end
-  
-  
+
   private
-  
+
     def get_action
       action = nil
       # Keep asking for user input until we get a valid action
@@ -41,7 +40,7 @@ class Guide
       end
       return action, args
     end
-  
+
     def do_action(action, args=[])
       case action
       when 'list'
@@ -62,7 +61,7 @@ class Guide
       sort_order = args.shift
       sort_order = args.shift if sort_order == 'by'
       sort_order = "name" unless @@valid_sorting.include?(sort_order)
-    
+
       restaurants = Restaurant.all
       restaurants.sort! do |r1, r2|
         case sort_order
@@ -77,14 +76,16 @@ class Guide
       output_restaurant_table(restaurants)
       puts "Sort using: 'list cuisine' or 'list by cuisine'\n\n"
     end
-  
+
     def find(keyword="")
       output_action_header("Find a restaurant")
       if keyword
         restaurants = Restaurant.all
         found = restaurants.select do |rest|
-          rest.name.downcase.include?(keyword.downcase) || 
-          rest.cuisine.downcase.include?(keyword.downcase) || 
+          rest.name.downcase.include?(keyword.downcase) ||
+
+          rest.cuisine.downcase.include?(keyword.downcase) ||
+
           rest.price.to_i <= keyword.to_i
         end
         output_restaurant_table(found)
@@ -93,7 +94,7 @@ class Guide
         puts "Examples: 'find tamale', 'find Mexican', 'find mex'\n\n"
       end
     end
-  
+
     def add
       output_action_header("Add a restaurant")
       attributes = restaurant_attribute_input
@@ -104,7 +105,7 @@ class Guide
         puts "\nSave Error: Restaurant not added\n\n"
       end
     end
-  
+
     def output_introduction
       puts "\n\n<<< Welcome to the Food Finder >>>\n\n"
       puts "This is an interactive guide to help you find the food you crave.\n\n"
@@ -113,15 +114,15 @@ class Guide
     def output_conclusion
       puts "\n<<< Goodbye and Bon Appetit! >>>\n\n\n"
     end
-  
+
     def output_valid_actions
       puts "Actions: " + @@valid_actions.join(", ")
     end
-        
+
     def output_action_header(text)
       puts "\n#{text.upcase.center(60)}\n\n"
     end
-  
+
     def output_restaurant_table(restaurants=[])
       print " " + "Name".ljust(30)
       print " " + "Cuisine".ljust(20)
@@ -136,7 +137,7 @@ class Guide
       puts "No listings found" if restaurants.empty?
       puts "-" * 60
     end
-  
+
     def restaurant_attribute_input
       args = {}
       print "Restaurant name: "
