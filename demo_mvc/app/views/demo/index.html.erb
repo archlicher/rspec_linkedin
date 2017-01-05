@@ -1,0 +1,10 @@
+<h1>Hello from index</h1>
+
+<a href="/demo/hello">Hello page 1</a>
+<br/>
+<%= link_to('Hello page 2', {:controller => 'demo', :action => 'hello'})%>
+
+<br/>
+<%= link_to('Hello with params', {:controller => 'demo', :action => 'hello', :page => '5', :id => 201})%>
+<br/>
+<%= link_to('Roar', '#', :onclick => "jsRoar('JavaScript'); return true;") %>

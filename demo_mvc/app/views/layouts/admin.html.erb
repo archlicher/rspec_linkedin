@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DemoMvc: <%= @page_title || "Admin area"%></title>
+		<%= stylesheet_link_tag('admin', media: 'all') %>
+	</head>
+
+	<body>
+		<div id="header">
+			<h1>Demo CMS Admin</h1>
+		</div>
+		<div id="main">
+			<% if !flash[:notice].blank? %>
+				<div class="notice">
+					<%= flash[:notice] %>
+				</div>
+			<% end %>
+			<% if !flash[:error].blank? %>
+				<div class="error">
+					<%= flash[:error] %>
+				</div>
+			<% end %>
+			<div id="content">
+				<%= yield %>
+			</div>
+		</div>
+		<div id="footer">
+			<p id="copyright">&copy; archlicher.com</p>
+		</div>
+	</body>
+</html>
