@@ -2,9 +2,9 @@ class SubjectsController < ApplicationController
 
   layout 'admin'
 
-  before_action :confirm_logged_in
-  before_action :find_subject, :only => [:show, :edit, :update, :delete, :destroy]
-  before_action :set_subject_count, :only => [:new, :create, :edit, :update]
+  # before_action :confirm_logged_in
+  # before_action :find_subject, :only => [:show, :edit, :update, :delete, :destroy]
+  # before_action :set_subject_count, :only => [:new, :create, :edit, :update]
 
   def index
     logger.debug("################# Testing logger.")
